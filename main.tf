@@ -15,6 +15,12 @@ resource "aws_iam_role_policy_attachment" "ha-attach" {
   policy_arn = aws_iam_policy.ha-policy[0].arn
 }
 
+resource "aws_iam_role_policy_attachment" "bs-attach" {
+  count      = var.enable_ha ? 1 : 0
+  role       = aws_iam_role.fw-role.name
+  policy_arn = aws_iam_policy.bs-policy[0].arn
+}
+
 resource "aws_iam_role" "fw-role" {
   name = "${var.name}-fw-role"
 
@@ -75,6 +81,29 @@ resource "aws_iam_policy" "ha-policy" {
           "ec2:DescribeNetworkInterfaces"
         ],
       "Resource": "*"}
+  ]
+}
+EOF
+}
+
+resource "aws_iam_policy" "bs-policy" {
+  count = var.enable_bs ? 1 : 0
+  name  = "${var.name}-BootstrapRolePolicy"
+
+  policy = <<EOF
+{
+  "Version" : "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": "s3:ListBucket",
+      "Resource": "arn:aws:s3:::${var.bs_bucket}"
+    },
+    {
+    "Effect": "Allow",
+    "Action": "s3:GetObject",
+    "Resource": "arn:aws:s3:::${var.bs_bucket}/*"
+    }
   ]
 }
 EOF

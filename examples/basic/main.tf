@@ -7,4 +7,6 @@ module "iam_profile" {
   name      = var.name
   enable_cw = true
   enable_ha = true
+  enable_bs = true
+  bs_bucket = "td-flow-export"
 }
