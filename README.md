@@ -1,44 +1,39 @@
-## [[Module Name]]
-### [[Overview]]
-Describe what the module should do.
+## EC2 IAM Instance Profile
+### Overview
+This module simplifies the createion of the required IAM instance profiles for Palo Alto VM Series Firewalls on AWS to enable custom cloud watch metrics and/or HA capability.
 
-### [[Caveats]]
-Describe what the module cannot do . 
+### Caveats
+None
 
-### Required Variables  
-__Name:__ [[Name of VAR]]  
-__TYPE:__ [[Type of VAR]]  
-__DESCRIPTION:__ [[Description]]  
-[[ if dictionary ]]  
-__REQUIRED KEYS:__ 
+### Usaage
+```
+provider "aws" {
+  region = var.region
+}
 
-| key | type | Description |
----|---|---
-|  |  |
+module "iam_profile" {
+  source    = "../../"
+  name      = var.name
+  enable_cw = true
+  enable_ha = true
+}
+```
+## Providers
 
-__OPTIONAL KEYS:__  
+| Name | Version |
+|------|---------|
+| aws | ~> 2.7.0 |
 
-| key | type | Description |
----|---|---
-|   |   |
+## Inputs
 
-### Optional Variables
-__Name:__ [[Name of VAR]]  
-__TYPE:__ [[Type of VAR]]  
-__DESCRIPTION:__ [[Description]]  
-[[ if dictionary ]]  
-__REQUIRED KEYS:__   
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:-----:|
+| enable\_cw | Enable for CW IAM policy | `bool` | `false` | no |
+| enable\_ha | Enable for HA IAM policy | `bool` | `false` | no |
+| name | Name to prepend to IAM resources | `string` | `"palo"` | no |
 
-| key | type | Description |
----|---|---
-  |   |   |
+## Outputs
 
-__OPTIONAL KEYS:__  
-
-| key | type | Description |
----|---|---
-|  |  |
-
-### Resources Created  
-(resoucrce)[link to resource]  
-
+| Name | Description |
+|------|-------------|
+| iam\_instance\_profile\_name | IAM instance profile name |
