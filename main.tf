@@ -16,7 +16,7 @@ resource "aws_iam_role_policy_attachment" "ha-attach" {
 }
 
 resource "aws_iam_role_policy_attachment" "bs-attach" {
-  count      = var.enable_ha ? 1 : 0
+  count      = var.enable_bs ? 1 : 0
   role       = aws_iam_role.fw-role.name
   policy_arn = aws_iam_policy.bs-policy[0].arn
 }
