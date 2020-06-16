@@ -75,7 +75,8 @@ resource "aws_iam_policy" "ha-policy" {
     {
       "Effect": "Allow",
       "Action":
-        ["ec2:AttachNetworkInterface",
+        [
+          "ec2:AttachNetworkInterface",
           "ec2:DetachNetworkInterface",
           "ec2:DescribeInstances",
           "ec2:DescribeNetworkInterfaces"
