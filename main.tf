@@ -1,5 +1,5 @@
 resource "aws_iam_instance_profile" "fw_profile" {
-  name = "${var.name}_profile"
+  name = "${var.name}Profile"
   role = aws_iam_role.fw-role.name
 }
 
@@ -21,8 +21,14 @@ resource "aws_iam_role_policy_attachment" "bs-attach" {
   policy_arn = aws_iam_policy.bs-policy[0].arn
 }
 
+resource "aws_iam_role_policy_attachment" "cl-attach" {
+  count      = var.enable_cl ? 1 : 0
+  role       = aws_iam_role.fw-role.name
+  policy_arn = aws_iam_policy.cl-policy[0].arn
+}
+
 resource "aws_iam_role" "fw-role" {
-  name = "${var.name}-fw-role"
+  name = "${var.name}FWRole"
 
   assume_role_policy = <<EOF
 {
@@ -42,7 +48,7 @@ EOF
 
 resource "aws_iam_policy" "cw-policy" {
   count       = var.enable_cw ? 1 : 0
-  name        = "${var.name}-cw-policy"
+  name        = "${var.name}CWPolicy"
   description = "Policy for putting metrics to cloud watch"
 
   policy = <<EOF
@@ -65,7 +71,7 @@ EOF
 
 resource "aws_iam_policy" "ha-policy" {
   count       = var.enable_ha ? 1 : 0
-  name        = "${var.name}-ha-policy"
+  name        = "${var.name}HAPolicy"
   description = "Policy for putting enabling HA"
 
   policy = <<EOF
@@ -89,7 +95,7 @@ EOF
 
 resource "aws_iam_policy" "bs-policy" {
   count = var.enable_bs ? 1 : 0
-  name  = "${var.name}-BootstrapRolePolicy"
+  name  = "${var.name}BootstrapPolicy"
 
   policy = <<EOF
 {
@@ -104,6 +110,28 @@ resource "aws_iam_policy" "bs-policy" {
     "Effect": "Allow",
     "Action": "s3:GetObject",
     "Resource": "arn:aws:s3:::${var.bs_bucket}/*"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_policy" "cl-policy" {
+  count = var.enable_cl ? 1 : 0
+  name  = "${var.name}CloudLoggingPolicy"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+          "logs:CreateLogStream",
+          "logs:CreateLogGroup",
+          "logs:PutLogEvents"
+      ],
+      "Resource": "*"
     }
   ]
 }

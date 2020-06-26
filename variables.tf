@@ -22,6 +22,12 @@ variable "enable_bs" {
   type        = bool
 }
 
+variable "enable_cl" {
+  description = "Enable cloud logging HA IAM policy"
+  default     = true
+  type        = bool
+}
+
 variable "bs_bucket" {
   description = "name of bootstrap bucket"
   default     = ""

@@ -29,9 +29,10 @@ module "iam_profile" {
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:-----:|
 | bs\_bucket | name of bootstrap bucket | `string` | `""` | no |
-| enable\_bs | Enable boostrap bucket | `bool` | `false` | no |
+| enable\_bs | Enable for boostrap bucket IAM policy | `bool` | `false` | no |
 | enable\_cw | Enable for CW IAM policy | `bool` | `false` | no |
 | enable\_ha | Enable for HA IAM policy | `bool` | `false` | no |
+| enable\_cl | Enable for cloud logging IAM policy | `bool` | `true` | no |
 | name | Name to prepend to IAM resources | `string` | `"palo"` | no |
 
 ## Outputs
